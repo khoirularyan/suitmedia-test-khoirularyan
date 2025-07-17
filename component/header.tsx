@@ -1,32 +1,43 @@
 "use client"
 
-import { useState, useEffect } from "react";
+import { useEffect, useState, useRef } from "react"
 
 export function Header() {
-    const [isheaderVisible, setIsHeaderVisible] = useState(true)
-    const [isheadertransparent, setIsHeaderTransparent] = useState(true)
-    const [lastScrollY, setLastScrollY] = useState(0)
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true)
+  const [isHeaderTransparent, setIsHeaderTransparent] = useState(false)
+  const lastScrollY = useRef(0)
+  const ticking = useRef(false)
 
-
-useEffect(() => {
+  useEffect(() => {
     const handleScroll = () => {
-      const currentScrollY = window.scrollY
+      if (!ticking.current) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY
 
-      if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        // Scrolling down
-        setIsHeaderVisible(false)
-      } else if (currentScrollY < lastScrollY) {
-        // Scrolling up
-        setIsHeaderVisible(true)
-        setIsHeaderTransparent(currentScrollY > 50)
+          if (currentScrollY === 0) {
+            // Di paling atas
+            setIsHeaderVisible(true)
+            setIsHeaderTransparent(false)
+          } else if (currentScrollY > lastScrollY.current + 15) {
+            // Scroll turun → sembunyi
+            setIsHeaderVisible(false)
+            setIsHeaderTransparent(false)
+          } else if (currentScrollY < lastScrollY.current - 15) {
+            // Scroll naik → muncul transparan
+            setIsHeaderVisible(true)
+            setIsHeaderTransparent(true)
+          }
+
+          lastScrollY.current = currentScrollY
+          ticking.current = false
+        })
+        ticking.current = true
       }
-
-      setLastScrollY(currentScrollY)
     }
 
     window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [lastScrollY])
+  }, [])
 
   const menuItems = [
     { name: "Work", href: "#", active: false },
@@ -40,11 +51,15 @@ useEffect(() => {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${
-        isheaderVisible ? "translate-y-0" : "-translate-y-full"
-      } ${isheadertransparent ? "bg-[#ea580c] backdrop-blur-sm" : "bg-transparent"}`}
+        isHeaderVisible ? "translate-y-0" : "-translate-y-full"
+      } ${
+        isHeaderTransparent
+          ? "bg-orange-500/60 backdrop-blur-sm"
+          : "bg-orange-500"
+      }`}
     >
-      <div className="container mx-auto px-6 py-4">
-        <div className="flex mx-15 items-center justify-between">
+      <div className="container mx-auto px-6 py-4 max-w-[60vw]">
+        <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
             <img src="/logo.png" alt="Logo" className="h-8" />
@@ -61,15 +76,27 @@ useEffect(() => {
                 }`}
               >
                 {item.name}
-                {item.active && <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-white"></div>}
+                {item.active && (
+                  <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-white"></div>
+                )}
               </a>
             ))}
           </nav>
 
           {/* Mobile Menu Button */}
           <button className="md:hidden text-white">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
             </svg>
           </button>
         </div>

@@ -2,7 +2,7 @@
 
 import { Banner } from "@/component/banner";
 import { Header } from "@/component/header";
-import { List } from "@/component/list";
+import { List } from "@/component/list"; 
 
 export default function HomePage() {
   
