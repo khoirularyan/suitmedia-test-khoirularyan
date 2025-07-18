@@ -1,43 +1,45 @@
-"use client"
+"use client";
 
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState, useRef } from "react";
 
 export function Header() {
-  const [isHeaderVisible, setIsHeaderVisible] = useState(true)
-  const [isHeaderTransparent, setIsHeaderTransparent] = useState(false)
-  const lastScrollY = useRef(0)
-  const ticking = useRef(false)
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+  const [isHeaderTransparent, setIsHeaderTransparent] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+  const lastScrollY = useRef(0);
+  const ticking = useRef(false);
 
   useEffect(() => {
     const handleScroll = () => {
       if (!ticking.current) {
         window.requestAnimationFrame(() => {
-          const currentScrollY = window.scrollY
+          const currentScrollY = window.scrollY;
 
           if (currentScrollY === 0) {
             // Di paling atas
-            setIsHeaderVisible(true)
-            setIsHeaderTransparent(false)
+            setIsHeaderVisible(true);
+            setIsHeaderTransparent(false);
           } else if (currentScrollY > lastScrollY.current + 15) {
             // Scroll turun → sembunyi
-            setIsHeaderVisible(false)
-            setIsHeaderTransparent(false)
+            setIsHeaderVisible(false);
+            setIsHeaderTransparent(false);
           } else if (currentScrollY < lastScrollY.current - 15) {
             // Scroll naik → muncul transparan
-            setIsHeaderVisible(true)
-            setIsHeaderTransparent(true)
+            setIsHeaderVisible(true);
+            setIsHeaderTransparent(true);
           }
 
-          lastScrollY.current = currentScrollY
-          ticking.current = false
-        })
-        ticking.current = true
+          lastScrollY.current = currentScrollY;
+          ticking.current = false;
+        });
+        ticking.current = true;
       }
-    }
+    };
 
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const menuItems = [
     { name: "Work", href: "#", active: false },
@@ -46,7 +48,18 @@ export function Header() {
     { name: "Ideas", href: "#", active: true },
     { name: "Careers", href: "#", active: false },
     { name: "Contact", href: "#", active: false },
-  ]
+  ];
+
+  // Handle open/close with animation
+  const handleMobileMenu = () => {
+    if (!mobileOpen) {
+      setMobileOpen(true);
+      setDropdownVisible(true);
+    } else {
+      setDropdownVisible(false);
+      setTimeout(() => setMobileOpen(false), 400); // match animation duration
+    }
+  };
 
   return (
     <header
@@ -58,33 +71,52 @@ export function Header() {
           : "bg-orange-500"
       }`}
     >
-      <div className="container mx-auto px-6 py-4 max-w-[60vw]">
+      <div className="container mx-auto px-6 py-4 max-w-[75vw]">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
             <img src="/logo.png" alt="Logo" className="h-8" />
           </div>
 
-          {/* Navigation Menu */}
+          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             {menuItems.map((item) => (
               <a
                 key={item.name}
                 href={item.href}
-                className={`text-white hover:text-gray-300 transition-colors duration-200 relative ${
+                className={`group text-white hover:text-gray-300 transition-colors duration-200 relative ${
                   item.active ? "font-semibold" : "font-normal"
                 }`}
               >
                 {item.name}
+                {/* Active underline: always full width */}
                 {item.active && (
-                  <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-white"></div>
+                  <span
+                    className="absolute left-1/2 -bottom-1 h-0.5 bg-white transition-all duration-300"
+                    style={{
+                      width: "100%",
+                      transform: "translateX(-50%)",
+                    }}
+                  ></span>
                 )}
+                {/* Hover underline animation: grows from center */}
+                <span
+                  className="absolute left-1/2 -bottom-1 h-0.5 bg-white transition-transform duration-300 origin-center scale-x-0 group-hover:scale-x-100"
+                  style={{
+                    width: "100%",
+                    transform: "translateX(-50%)",
+                  }}
+                ></span>
               </a>
             ))}
           </nav>
 
           {/* Mobile Menu Button */}
-          <button className="md:hidden text-white">
+          <button
+            className="md:hidden text-white"
+            onClick={handleMobileMenu}
+            aria-label="Open menu"
+          >
             <svg
               className="w-6 h-6"
               fill="none"
@@ -100,7 +132,29 @@ export function Header() {
             </svg>
           </button>
         </div>
+
+        {/* Mobile Navigation */}
+        {mobileOpen && (
+          <nav
+            className={`md:hidden bg-orange-500 px-6 py-4 absolute top-full left-0 w-full z-40 flex flex-col gap-4 ${
+              dropdownVisible ? "animate-dropdown" : "animate-dropdown-close"
+            }`}
+          >
+            {menuItems.map((item) => (
+              <a
+                key={item.name}
+                href={item.href}
+                className={`text-white ${
+                  item.active ? "font-semibold underline" : "font-normal"
+                }`}
+                onClick={handleMobileMenu}
+              >
+                {item.name}
+              </a>
+            ))}
+          </nav>
+        )}
       </div>
     </header>
-  )
+  );
 }
