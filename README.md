@@ -11,6 +11,7 @@ A Next.js + Tailwind CSS web app to display ideas from Suitmedia API, featuring 
 - **Line Clamp**: Card titles are limited to 3 lines with ellipsis.
 - **Animated Header**: Navigation with underline animation and mobile dropdown with fade animation.
 - **Custom Tailwind Utilities**: Includes aspect ratio, line clamp, and dropdown animation.
+- **Dynamic Banner**: Banner image is dynamic, supports CMS integration via `cmsImageUrl` prop, fallback to `/banner.jpg` if not provided, with diagonal cut and parallax scroll effect.
 
 ## Getting Started
 
@@ -42,7 +43,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 - `app/page.tsx` — Main page, renders header, banner, and ideas list.
 - `component/header.tsx` — Responsive header with navigation and animation.
-- `component/banner.tsx` — Banner section with parallax effect.
+- `component/banner.tsx` — Banner section with parallax effect, diagonal cut, and dynamic image (CMS or fallback).
 - `component/list.tsx` — Ideas grid, sorting, pagination, and image fallback.
 - `pages/api/ideas.ts` — Next.js API route to proxy Suitmedia backend.
 - `app/globals.css` — Tailwind custom utilities and global styles.
@@ -50,7 +51,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ## Customization
 
 - **Logo**: Replace `/public/logo.png`.
-- **Banner**: Replace `/public/banner.jpg`.
+- **Banner**: Replace `/public/banner.jpg` or use `cmsImageUrl` prop for dynamic image.
 - **Default Image**: Optionally add `/public/default.png` for image fallback.
 - **Menu Items**: Edit `menuItems` array in `header.tsx`.
 
