@@ -17,15 +17,12 @@ export function Header() {
           const currentScrollY = window.scrollY;
 
           if (currentScrollY === 0) {
-            // Di paling atas
             setIsHeaderVisible(true);
             setIsHeaderTransparent(false);
           } else if (currentScrollY > lastScrollY.current + 15) {
-            // Scroll turun → sembunyi
             setIsHeaderVisible(false);
             setIsHeaderTransparent(false);
           } else if (currentScrollY < lastScrollY.current - 15) {
-            // Scroll naik → muncul transparan
             setIsHeaderVisible(true);
             setIsHeaderTransparent(true);
           }
@@ -57,7 +54,7 @@ export function Header() {
       setDropdownVisible(true);
     } else {
       setDropdownVisible(false);
-      setTimeout(() => setMobileOpen(false), 400); // match animation duration
+      setTimeout(() => setMobileOpen(false), 400);
     }
   };
 
@@ -73,7 +70,6 @@ export function Header() {
     >
       <div className="container mx-auto px-6 py-4 max-w-[75vw]">
         <div className="flex items-center justify-between">
-          {/* Logo */}
           <div className="flex items-center">
             <img src="/logo.png" alt="Logo" className="h-8" />
           </div>
@@ -89,7 +85,7 @@ export function Header() {
                 }`}
               >
                 {item.name}
-                {/* Active underline: always full width */}
+                {/* Active */}
                 {item.active && (
                   <span
                     className="absolute left-1/2 -bottom-1 h-0.5 bg-white transition-all duration-300"
@@ -99,7 +95,6 @@ export function Header() {
                     }}
                   ></span>
                 )}
-                {/* Hover underline animation: grows from center */}
                 <span
                   className="absolute left-1/2 -bottom-1 h-0.5 bg-white transition-transform duration-300 origin-center scale-x-0 group-hover:scale-x-100"
                   style={{

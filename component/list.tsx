@@ -14,7 +14,7 @@ interface Idea {
   content: string;
   small_image?: ImageObj[];
   medium_image?: ImageObj[];
-  [key: string]: any; // Future-proof for extra fields
+  [key: string]: any; // Allow any additional properties
 }
 
 export function List() {
@@ -78,7 +78,7 @@ export function List() {
     fetchData();
   }, [sort, perPage, page]);
 
-  // Format date with fallback
+  // Format date
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     if (isNaN(date.getTime())) return "-";
@@ -89,7 +89,7 @@ export function List() {
     });
   };
 
-  // Get image URL, future-proof for more image sizes
+  // Get image URL
   const getImageUrl = (idea: Idea) => {
     const imageFields = ["medium_image", "small_image"];
     let url = "";
@@ -164,7 +164,7 @@ export function List() {
                 key={idea.id}
                 className="border rounded-lg overflow-hidden drop-shadow-[0_5px_5px_rgba(0,0,0,0.10)] hover:drop-shadow-[0_5px_5px_rgba(0,0,0,0.15)] bg-white transform hover:scale-102 transition-all duration-300 ease-in-out"
               >
-                {/* Image with fixed aspect ratio (4:3) */}
+                {/* Image aspect ratio 4:3 */}
                 <div className="relative aspect-[4/3] bg-gray-100">
                   {imageUrl ? (
                     <Image
@@ -203,7 +203,6 @@ export function List() {
       {/* Pagination */}
       {!loading && total > 0 && (
         <div className="flex justify-center mt-8 gap-1 items-center">
-          {/* First & Prev */}
           <button
             onClick={() => setPage(1)}
             disabled={page === 1}
@@ -226,7 +225,6 @@ export function List() {
           </button>
           {/* Page Numbers */}
           {Array.from({ length: Math.ceil(total / perPage) }).map((_, i) => {
-            // Only show first, last, current, and neighbors
             if (
               i + 1 === 1 ||
               i + 1 === Math.ceil(total / perPage) ||
