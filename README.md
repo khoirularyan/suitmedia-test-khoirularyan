@@ -1,8 +1,30 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Suitmedia Test Project
+
+A Next.js + Tailwind CSS web app to display ideas from Suitmedia API, featuring responsive design, sorting, pagination, and animated UI.
+
+## Features
+
+- **Ideas List**: Fetches and displays ideas with images, title, and publish date.
+- **Sorting & Pagination**: Sort by newest/oldest, set items per page, and navigate with modern pagination.
+- **Responsive Grid**: 4-column layout on desktop, adapts for mobile.
+- **Image Fallback**: Shows "No Image" if image fails to load.
+- **Line Clamp**: Card titles are limited to 3 lines with ellipsis.
+- **Animated Header**: Navigation with underline animation and mobile dropdown with fade animation.
+- **Custom Tailwind Utilities**: Includes aspect ratio, line clamp, and dropdown animation.
 
 ## Getting Started
 
-First, run the development server:
+Install dependencies:
+
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+```
+
+Run the development server:
 
 ```bash
 npm run dev
@@ -14,23 +36,29 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `app/page.tsx` — Main page, renders header, banner, and ideas list.
+- `component/header.tsx` — Responsive header with navigation and animation.
+- `component/banner.tsx` — Banner section with parallax effect.
+- `component/list.tsx` — Ideas grid, sorting, pagination, and image fallback.
+- `pages/api/ideas.ts` — Next.js API route to proxy Suitmedia backend.
+- `app/globals.css` — Tailwind custom utilities and global styles.
 
-## Learn More
+## Customization
 
-To learn more about Next.js, take a look at the following resources:
+- **Logo**: Replace `/public/logo.png`.
+- **Banner**: Replace `/public/banner.jpg`.
+- **Default Image**: Optionally add `/public/default.png` for image fallback.
+- **Menu Items**: Edit `menuItems` array in `header.tsx`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deployment
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Deploy easily on [Vercel](https://vercel.com/) or any platform supporting Next.js.
 
-## Deploy on Vercel
+## References
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
