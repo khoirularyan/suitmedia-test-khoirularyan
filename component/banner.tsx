@@ -1,20 +1,31 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
+import { useState, useEffect } from "react";
+import Image from "next/image";
 
-export function Banner() {
-  const [scrollY, setScrollY] = useState(0)
+export interface BannerProps {
+  cmsImageUrl?: string;
+  altText?: string;
+}
+
+export function Banner({ cmsImageUrl, altText }: BannerProps) {
+  const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrollY(window.scrollY)
-    }
+      setScrollY(window.scrollY);
+    };
 
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-  const parallaxOffset = scrollY * 0.3
+  const parallaxOffset = scrollY * 0.3;
+
+  const imageSrc =
+    typeof cmsImageUrl === "string" && cmsImageUrl
+      ? cmsImageUrl
+      : "/banner.jpg";
 
   return (
     <section className="relative h-[70vh] overflow-hidden">
@@ -23,12 +34,16 @@ export function Banner() {
         className="absolute inset-0 z-0"
         style={{
           transform: `translateY(${parallaxOffset}px)`,
+          clipPath: "polygon(0 100%, 100% 70%, 100% 100%, 0% 100%)",
         }}
       >
-        <img
-          src="/banner.jpg"
-          alt="Banner Background"
-          className="w-full h-full object-cover"
+        <Image
+          src={imageSrc}
+          alt={altText || "Banner Background"}
+          fill
+          className="object-cover"
+          priority
+          sizes="100vw"
         />
       </div>
 
@@ -71,5 +86,5 @@ export function Banner() {
         </svg>
       </div>
     </section>
-  )
+  );
 }
